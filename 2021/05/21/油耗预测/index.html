@@ -1,0 +1,282 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>汽车油耗预测实战 | 小周の部落阁</title><meta name="keywords" content="TensorFlow,神经网络　"><meta name="author" content="Zhouwy"><meta name="copyright" content="Zhouwy"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="将利用全连接网络模型来完成汽车的效能指标MPG(Mile Per Gallon，每加仑燃油英里数)的预测问题实战">
+<meta property="og:type" content="article">
+<meta property="og:title" content="汽车油耗预测实战">
+<meta property="og:url" content="http://example.com/2021/05/21/%E6%B2%B9%E8%80%97%E9%A2%84%E6%B5%8B/index.html">
+<meta property="og:site_name" content="小周の部落阁">
+<meta property="og:description" content="将利用全连接网络模型来完成汽车的效能指标MPG(Mile Per Gallon，每加仑燃油英里数)的预测问题实战">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/油耗.jpg">
+<meta property="article:published_time" content="2021-05-21T01:25:00.000Z">
+<meta property="article:modified_time" content="2021-05-21T01:25:00.000Z">
+<meta property="article:author" content="Zhouwy">
+<meta property="article:tag" content="TensorFlow">
+<meta property="article:tag" content="神经网络　">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/油耗.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2021/05/21/%E6%B2%B9%E8%80%97%E9%A2%84%E6%B5%8B/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: Zhouwy","link":"链接: ","source":"来源: 小周の部落阁","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '汽车油耗预测实战',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-05-21 09:25:00'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpeg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">14</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">28</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://blog-1300216920.cos.ap-nanjing.myqcloud.com/油耗.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">小周の部落阁</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">汽车油耗预测实战</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-05-21T01:25:00.000Z" title="发表于 2021-05-21 09:25:00">2021-05-21</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-05-21T01:25:00.000Z" title="更新于 2021-05-21 09:25:00">2021-05-21</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E4%B8%AA%E4%BA%BA%E9%A1%B9%E7%9B%AE/">个人项目</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="汽车油耗预测实战"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="汽车油耗预测实战"><a href="#汽车油耗预测实战" class="headerlink" title="汽车油耗预测实战"></a>汽车油耗预测实战</h1><p>将利用全连接网络模型来完成汽车的效能指标MPG(Mile Per Gallon，每加仑燃油英里数)的预测问题实战</p>
+<h2 id="1-、数据集"><a href="#1-、数据集" class="headerlink" title="1 、数据集"></a>1 、数据集</h2><p>采用<a target="_blank" rel="noopener" href="http://archive.ics.uci.edu/ml/machine-learning-databases/">http://archive.ics.uci.edu/ml/machine-learning-databases/</a> 上的Auto-MPG 数据集，它记录了各种汽车效能指标与气缸数、重量、马力等其它因子的真实数据，查看数据集的前5 项，。除了产地的数字字段表示类别外，其他字段都是数值类型。对于产地地段，1 表示美国，2 表示欧洲，3 表示日本。</p>
+<p><img src="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/image-20210520124026048.png"></p>
+<table>
+<thead>
+<tr>
+<th>MPG</th>
+<th>Cylinders</th>
+<th>Displacement</th>
+<th>Horsepower</th>
+<th>Weight</th>
+<th>Acceleration</th>
+<th>Model Year</th>
+<th>Origin</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>每加<br/>仑燃<br/>油英<br/>里</td>
+<td>气缸数</td>
+<td>排量</td>
+<td>马力</td>
+<td>重量</td>
+<td>加速度</td>
+<td>型号</td>
+<td>年份</td>
+</tr>
+</tbody></table>
+<p>Auto MPG 数据集一共记录了398 项数据，UCI 服务器下载并读取数据集到DataFrame 对象中，代码如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">load_data</span>():</span></span><br><span class="line">      dataset_path = keras.utils.get_file(<span class="string">&quot;auto-mpg.data&quot;</span>,<span class="string">&quot;http://archive.ics.uci.edu/ml/machine-learning-databases/auto-mpg/auto-mpg.data&quot;</span>)</span><br><span class="line">      <span class="comment"># 效能（公里数每加仑），气缸数，排量，马力，重量</span></span><br><span class="line">      <span class="comment"># 加速度，型号年份，产地</span></span><br><span class="line">      column_names = [<span class="string">&#x27;MPG&#x27;</span>, <span class="string">&#x27;Cylinders&#x27;</span>, <span class="string">&#x27;Displacement&#x27;</span>, <span class="string">&#x27;Horsepower&#x27;</span>, <span class="string">&#x27;Weight&#x27;</span>,</span><br><span class="line">                      <span class="string">&#x27;Acceleration&#x27;</span>, <span class="string">&#x27;Model Year&#x27;</span>, <span class="string">&#x27;Origin&#x27;</span>]</span><br><span class="line">      raw_dataset = pd.read_csv(dataset_path, names=column_names,</span><br><span class="line">                                na_values=<span class="string">&quot;?&quot;</span>, comment=<span class="string">&#x27;\t&#x27;</span>,</span><br><span class="line">                                sep=<span class="string">&quot; &quot;</span>, skipinitialspace=<span class="literal">True</span>)</span><br><span class="line">      dataset = raw_dataset.copy()</span><br><span class="line">      <span class="keyword">return</span> dataset</span><br><span class="line"><span class="comment"># 查看部分数据</span></span><br><span class="line">dataset.head()</span><br></pre></td></tr></table></figure>
+
+<p>输出如图所示：</p>
+<p><img src="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/image-20210520124255726.png"></p>
+<p>原始表格中的数据可能含有空字段(缺失值)的数据项，需要清除这些记录项。并且由于 Origin 字段为类别类型数据，我们将其移除，并转换为新的3 个字段：USA、Europe 和Japan，分别代表是否来自此产地。按着8:2 的比例切分数据集为训练集和测试集。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">preprocess_dataset</span>(<span class="params">dataset</span>):</span></span><br><span class="line">    dataset = dataset.copy()</span><br><span class="line">    <span class="comment"># 统计空白数据,并清除</span></span><br><span class="line">    dataset = dataset.dropna()</span><br><span class="line">    <span class="comment"># 处理类别型数据，其中origin列代表了类别1,2,3,分布代表产地：美国、欧洲、日本</span></span><br><span class="line">    <span class="comment"># 其弹出这一列</span></span><br><span class="line">    origin = dataset.pop(<span class="string">&#x27;Origin&#x27;</span>)</span><br><span class="line">    <span class="comment"># 根据origin列来写入新列</span></span><br><span class="line">    dataset[<span class="string">&#x27;USA&#x27;</span>] = (origin == <span class="number">1</span>) * <span class="number">1.0</span></span><br><span class="line">    dataset[<span class="string">&#x27;Europe&#x27;</span>] = (origin == <span class="number">2</span>) * <span class="number">1.0</span></span><br><span class="line">    dataset[<span class="string">&#x27;Japan&#x27;</span>] = (origin == <span class="number">3</span>) * <span class="number">1.0</span></span><br><span class="line">    <span class="comment"># 切分为训练集和测试集</span></span><br><span class="line">    train_dataset = dataset.sample(frac=<span class="number">0.8</span>, random_state=<span class="number">0</span>)</span><br><span class="line">    test_dataset = dataset.drop(train_dataset.index)</span><br><span class="line">    <span class="keyword">return</span> train_dataset, test_dataset</span><br></pre></td></tr></table></figure>
+
+<p>统计得到的训练集和测试集数据：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">train_dataset, test_dataset = preprocess_dataset(dataset)</span><br><span class="line"><span class="comment"># 统计数据</span></span><br><span class="line">sns_plot = sns.pairplot(train_dataset[[<span class="string">&quot;Cylinders&quot;</span>, <span class="string">&quot;Displacement&quot;</span>, <span class="string">&quot;Weight&quot;</span>, <span class="string">&quot;MPG&quot;</span>]], diag_kind=<span class="string">&quot;kde&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/%E4%B8%8B%E8%BD%BD.png"></p>
+<p>统计训练集的各个字段数值的均值和标准差，并完成数据的标准化，通过norm()函数实现，代码如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看训练集的输入X的统计数据</span></span><br><span class="line">train_stats = train_dataset.describe()</span><br><span class="line">train_stats.pop(<span class="string">&quot;MPG&quot;</span>)</span><br><span class="line">train_stats = train_stats.transpose()</span><br><span class="line">train_stats</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">norm</span>(<span class="params">x, train_stats</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    标准化数据</span></span><br><span class="line"><span class="string">    :param x:</span></span><br><span class="line"><span class="string">    :param train_stats: get_train_stats(train_dataset)</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> (x - train_stats[<span class="string">&#x27;mean&#x27;</span>]) / train_stats[<span class="string">&#x27;std&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/image-20210520125501217.png"></p>
+<p>打印出训练集和测试集的大小：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 移动MPG油耗效能这一列为真实标签Y</span></span><br><span class="line">train_labels = train_dataset.pop(<span class="string">&#x27;MPG&#x27;</span>)</span><br><span class="line">test_labels = test_dataset.pop(<span class="string">&#x27;MPG&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 进行标准化</span></span><br><span class="line">normed_train_data = norm(train_dataset, train_stats)</span><br><span class="line">normed_test_data = norm(test_dataset, train_stats)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(normed_train_data.shape,train_labels.shape)</span><br><span class="line"><span class="built_in">print</span>(normed_test_data.shape, test_labels.shape)</span><br></pre></td></tr></table></figure>
+
+<p>得到结果：</p>
+<p>(314, 9) (314,) # 训练集共314 行，输入特征长度为9,标签用一个标量表示</p>
+<p>(78, 9) (78,) # 测试集共78 行，输入特征长度为9,标签用一个标量表示</p>
+<p>可以通过简单地统计数据集中各字段之间的两两分布来观察各个字段对MPG 的影响。可以大致观察到，其中汽车排量、重量与MPG 的关系比较简单，随着排量或重量的增大，汽车的MPG 降低，能耗增加；气缸数越小，汽车能做到的最好MPG 也越高，越可能更节能，这都是是符合我们的生活经验的。</p>
+<p><img src="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/yuce.jpg"></p>
+<h2 id="2-、创建网络"><a href="#2-、创建网络" class="headerlink" title="2 、创建网络"></a>2 、创建网络</h2><p>考虑到 Auto-MPG 数据集规模较小，我们只创建一个3 层的全连接网络来完成MPG值的预测任务。输入𝑿的特征共有9 种，因此第一层的输入节点数为9。第一层、第二层的输出节点数设计为64和64，由于只有一种预测值，输出层输出节点设计为1。考虑MPG ∈𝑅+，因此输出层的激活函数可以不加，也可以添加ReLU 激活函数。</p>
+<p>将网络实现为一个自定义网络类，只需要在初始化函数中创建各个子网络层，并在前向计算函数call 中实现自定义网络类的计算逻辑即可。自定义网络类继承自keras.Model 基类，这也是自定义网络类的标准写法，以方便地利用keras.Model 基类提供的trainable_variables、save_weights 等各种便捷功能。网络模型类实现如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Network</span>(<span class="params">keras.Model</span>):</span></span><br><span class="line">    <span class="comment"># 回归网络</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(Network, self).__init__()</span><br><span class="line">        <span class="comment"># 创建3个全连接层</span></span><br><span class="line">        self.fc1 = layers.Dense(<span class="number">64</span>, activation=<span class="string">&#x27;relu&#x27;</span>)</span><br><span class="line">        self.fc2 = layers.Dense(<span class="number">64</span>, activation=<span class="string">&#x27;relu&#x27;</span>)</span><br><span class="line">        self.fc3 = layers.Dense(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">call</span>(<span class="params">self, inputs</span>):</span></span><br><span class="line">        <span class="comment"># 依次通过3个全连接层</span></span><br><span class="line">        x = self.fc1(inputs)</span><br><span class="line">        x = self.fc2(x)</span><br><span class="line">        x = self.fc3(x)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> x</span><br></pre></td></tr></table></figure>
+
+<h2 id="3、测试和训练"><a href="#3、测试和训练" class="headerlink" title="3、测试和训练"></a>3、测试和训练</h2><p>在完成主网络模型类的创建后，我们来实例化网络对象和创建优化器，代码如下:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">build_model</span>():</span></span><br><span class="line">    model = Network()    <span class="comment"># 创建网络</span></span><br><span class="line">    model.build(input_shape=(<span class="number">4</span>, <span class="number">9</span>))<span class="comment"># 通过build 函数完成内部张量的创建，其中4 为任意设置的batch 数量，9 为输入特征长度</span></span><br><span class="line">    model.summary()<span class="comment"># 打印网络信息</span></span><br><span class="line">    <span class="keyword">return</span> model</span><br><span class="line">model = build_model() <span class="comment">#创建模型</span></span><br><span class="line">optimizer = tf.keras.optimizers.RMSprop(<span class="number">0.001</span>)<span class="comment"># 创建优化器，指定学习率</span></span><br><span class="line">train_db = tf.data.Dataset.from_tensor_slices((normed_train_data.values, train_labels.values))</span><br><span class="line">train_db = train_db.shuffle(<span class="number">100</span>).batch(<span class="number">32</span>)</span><br></pre></td></tr></table></figure>
+
+<p>得到网络结构如图所示：</p>
+<p><img src="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/image-20210520131435918.png"></p>
+<p>接下来实现网络训练部分。通过Epoch 和Step 组成的双层循环训练网络，共训练200个Epoch，代码如下:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">train</span>(<span class="params">model, train_db, optimizer, normed_test_data, test_labels</span>):</span></span><br><span class="line">    train_mae_losses = []</span><br><span class="line">    test_mae_losses = []</span><br><span class="line">    <span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">200</span>):<span class="comment"># 200 个Epoch</span></span><br><span class="line">        <span class="keyword">for</span> step, (x, y) <span class="keyword">in</span> <span class="built_in">enumerate</span>(train_db):<span class="comment"># 遍历一次训练集</span></span><br><span class="line">            <span class="keyword">with</span> tf.GradientTape() <span class="keyword">as</span> tape:<span class="comment"># 梯度记录器，训练时需要使用它</span></span><br><span class="line">                out = model(x)<span class="comment">#通过网络得到输出</span></span><br><span class="line">                loss = tf.reduce_mean(losses.MSE(y, out))<span class="comment"># 计算MSE</span></span><br><span class="line">                mae_loss = tf.reduce_mean(losses.MAE(y, out))<span class="comment"># 计算MAE</span></span><br><span class="line">            <span class="keyword">if</span> step % <span class="number">10</span> == <span class="number">0</span>:<span class="comment"># 间隔性地打印训练误差</span></span><br><span class="line">                <span class="built_in">print</span>(epoch, step, <span class="built_in">float</span>(loss))</span><br><span class="line">            <span class="comment"># 计算梯度，并更新</span></span><br><span class="line">            grads = tape.gradient(loss, model.trainable_variables)</span><br><span class="line">            optimizer.apply_gradients(<span class="built_in">zip</span>(grads, model.trainable_variables))</span><br><span class="line">        train_mae_losses.append(<span class="built_in">float</span>(mae_loss))</span><br><span class="line">        out = model(tf.constant(normed_test_data.values))</span><br><span class="line">        test_mae_losses.append(tf.reduce_mean(losses.MAE(test_labels, out)))</span><br><span class="line">    <span class="keyword">return</span> train_mae_losses, test_mae_losses</span><br></pre></td></tr></table></figure>
+
+<p>执行如下代码即可完成整个模型的训练：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">train_mae_losses, test_mae_losses = train(model, train_db, optimizer, normed_test_data, test_labels)</span><br></pre></td></tr></table></figure>
+
+<p>对于回归问题，除了MSE 均方差可以用来模型的测试性能，还可以用平均绝对误差(Mean Absolute Error，简称MAE)来衡量模型的性能，它被定义为：<br>$$<br>MAS = \frac{1}{d_{out}}\sum_{i}|y_i - o_i|<br>$$<br>程序运算时记录每个Epoch 结束时的训练和测试MAE 数据，并绘制变化曲线，在执行过程中，可以明确的看到，随着Epoch 的增加，MAS明显减小。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">plot</span>(<span class="params">train_mae_losses, test_mae_losses</span>):</span></span><br><span class="line">    plt.figure()</span><br><span class="line">    plt.xlabel(<span class="string">&#x27;Epoch&#x27;</span>)</span><br><span class="line">    plt.ylabel(<span class="string">&#x27;MAE&#x27;</span>)</span><br><span class="line">    plt.plot(train_mae_losses, label=<span class="string">&#x27;Train&#x27;</span>)</span><br><span class="line">    plt.plot(test_mae_losses, label=<span class="string">&#x27;Test&#x27;</span>)</span><br><span class="line">    plt.legend()</span><br><span class="line">    <span class="comment"># plt.ylim([0,10])</span></span><br><span class="line">    plt.legend()</span><br><span class="line">    plt.show()</span><br><span class="line">plot(train_mae_losses, test_mae_losses)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/finallyout.png"></p>
+<p>可以观察到，在训练到约第25 个Epoch 时，MAE 的下降变得较缓慢，其中训练集的MAE还在继续缓慢下降，但是测试集MAE 几乎保持不变，因此可以在约第25 个epoch 时提前结束训练，并利用此时的网络参数来预测新的输入样本即可。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Zhouwy</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2021/05/21/%E6%B2%B9%E8%80%97%E9%A2%84%E6%B5%8B/">http://example.com/2021/05/21/%E6%B2%B9%E8%80%97%E9%A2%84%E6%B5%8B/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">小周の部落阁</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/TensorFlow/">TensorFlow</a><a class="post-meta__tags" href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">神经网络　</a></div><div class="post_share"><div class="social-share" data-image="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/油耗.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/06/15/YOLOv5%E5%88%9D%E4%BD%93%E9%AA%8C/"><img class="prev-cover" src="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/YOLOtest.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">【YOLOv5】初体验</div></div></a></div><div class="next-post pull-right"><a href="/2021/03/31/opencv%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/"><img class="next-cover" src="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/OpenCV.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">【树莓派】OpenCV3源码方式安装教程</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2020/04/07/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%88%86%E7%B1%BB%E5%9B%BE%E7%89%87/" title="机器视觉的算法研究"><img class="cover" src="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/t.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-04-07</div><div class="title">机器视觉的算法研究</div></div></a></div><div><a href="/2020/04/01/DeepLearningAndTensorFlow/" title="深度学习与TensorFlow"><img class="cover" src="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/deep_learning.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-04-01</div><div class="title">深度学习与TensorFlow</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B1%BD%E8%BD%A6%E6%B2%B9%E8%80%97%E9%A2%84%E6%B5%8B%E5%AE%9E%E6%88%98"><span class="toc-number">1.</span> <span class="toc-text">汽车油耗预测实战</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E3%80%81%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="toc-number">1.1.</span> <span class="toc-text">1 、数据集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E3%80%81%E5%88%9B%E5%BB%BA%E7%BD%91%E7%BB%9C"><span class="toc-number">1.2.</span> <span class="toc-text">2 、创建网络</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E6%B5%8B%E8%AF%95%E5%92%8C%E8%AE%AD%E7%BB%83"><span class="toc-number">1.3.</span> <span class="toc-text">3、测试和训练</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background: transparent"><div id="footer-wrap"><div class="copyright">&copy;2018 - 2022 By Zhouwy</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.2
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        insertScript: [200, () => {
+          document.querySelectorAll('mjx-container:not\([display]\)').forEach(node => {
+            const target = node.parentNode
+            if (target.nodeName.toLowerCase() === 'li') {
+              target.parentNode.classList.add('has-jax')
+            } else {
+              target.classList.add('has-jax')
+            }
+          });
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/contrib/copy-tex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/contrib/copy-tex.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', { class: 'katex-wrap'})
+  })
+})()</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/fireworks.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

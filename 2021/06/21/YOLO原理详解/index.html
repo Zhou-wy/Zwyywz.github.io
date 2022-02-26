@@ -1,0 +1,289 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>【YOLOv5】原理详解 | 小周の部落阁</title><meta name="keywords" content="目标检测,YOLO　"><meta name="author" content="Zhouwy"><meta name="copyright" content="Zhouwy"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="【YOLOv5】原理详解一、目标检测的性能指标1.1、混淆矩阵（confusion matrix）  精度Precision(查准率)：评估预测准不准 召回率Recall（查全率）： 评估找的准不准  1.2 IoU(Intersection over Union) &#x3D;&#x3D;IoU&#x3D;1 : 意味着预测边界框和地面真实边界框完全重叠。&#x3D;&#x3D;也可以为IoU设置阈值，以确定目标检测是否有效。假设将Lou设置为">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【YOLOv5】原理详解">
+<meta property="og:url" content="http://example.com/2021/06/21/YOLO%E5%8E%9F%E7%90%86%E8%AF%A6%E8%A7%A3/index.html">
+<meta property="og:site_name" content="小周の部落阁">
+<meta property="og:description" content="【YOLOv5】原理详解一、目标检测的性能指标1.1、混淆矩阵（confusion matrix）  精度Precision(查准率)：评估预测准不准 召回率Recall（查全率）： 评估找的准不准  1.2 IoU(Intersection over Union) &#x3D;&#x3D;IoU&#x3D;1 : 意味着预测边界框和地面真实边界框完全重叠。&#x3D;&#x3D;也可以为IoU设置阈值，以确定目标检测是否有效。假设将Lou设置为">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/yolo.jpg">
+<meta property="article:published_time" content="2021-06-21T01:25:00.000Z">
+<meta property="article:modified_time" content="2021-06-21T01:25:00.000Z">
+<meta property="article:author" content="Zhouwy">
+<meta property="article:tag" content="目标检测">
+<meta property="article:tag" content="YOLO　">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/yolo.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2021/06/21/YOLO%E5%8E%9F%E7%90%86%E8%AF%A6%E8%A7%A3/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: Zhouwy","link":"链接: ","source":"来源: 小周の部落阁","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '【YOLOv5】原理详解',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-06-21 09:25:00'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpeg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">14</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">28</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://blog-1300216920.cos.ap-nanjing.myqcloud.com/yolo.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">小周の部落阁</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">【YOLOv5】原理详解</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-06-21T01:25:00.000Z" title="发表于 2021-06-21 09:25:00">2021-06-21</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-06-21T01:25:00.000Z" title="更新于 2021-06-21 09:25:00">2021-06-21</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="【YOLOv5】原理详解"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="【YOLOv5】原理详解"><a href="#【YOLOv5】原理详解" class="headerlink" title="【YOLOv5】原理详解"></a>【YOLOv5】原理详解</h1><h2 id="一、目标检测的性能指标"><a href="#一、目标检测的性能指标" class="headerlink" title="一、目标检测的性能指标"></a>一、目标检测的性能指标</h2><h3 id="1-1、混淆矩阵（confusion-matrix）"><a href="#1-1、混淆矩阵（confusion-matrix）" class="headerlink" title="1.1、混淆矩阵（confusion matrix）"></a>1.1、混淆矩阵（confusion matrix）</h3><p><img src="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/image-20210624133726978.png"></p>
+<ul>
+<li>精度Precision(查准率)：评估预测准不准</li>
+<li>召回率Recall（查全率）： 评估找的准不准</li>
+</ul>
+<h3 id="1-2-IoU-Intersection-over-Union"><a href="#1-2-IoU-Intersection-over-Union" class="headerlink" title="1.2 IoU(Intersection over Union)"></a>1.2 IoU(Intersection over Union)</h3><p><img src="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/image-20210624134253965.png"></p>
+<p>==IoU=1 : 意味着预测边界框和地面真实边界框完全重叠。==<br>也可以为IoU设置阈值，以确定目标检测是否有效。假设将Lou设置为0.5，在这种情况下。<br>如果LOU &gt;=0.5，则将目标检测分类为正样本(TP)。<br>如果LOU &lt; 0.5，则为错误检测，并将其归类为负样本(FP)。<br>当图像中存在检测框且模型未能检测到目标时，它被认为是错误的无目标检测(FN)。<br>正确的无目标检测(TN)：TN是我们没有预测到物体的图像的每一部分且不含有目标。</p>
+<h3 id="1-3-AP-and-mAP"><a href="#1-3-AP-and-mAP" class="headerlink" title="1.3 AP and mAP"></a>1.3 AP and mAP</h3><ul>
+<li>AP衡量的是学习出来的模型在每个类别上的好坏</li>
+<li>mAP衡量的是学出的模型在所有类别上的好坏。mAP就是取所有类别上AP的平均值</li>
+</ul>
+<p><img src="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/image-20210624135045653.png"></p>
+<h2 id="二、YOLOv5项目代码解析"><a href="#二、YOLOv5项目代码解析" class="headerlink" title="二、YOLOv5项目代码解析"></a>二、YOLOv5项目代码解析</h2><h3 id="2-1-激活函数（Activations-py）"><a href="#2-1-激活函数（Activations-py）" class="headerlink" title="2.1 激活函数（Activations.py）"></a>2.1 激活函数（Activations.py）</h3><p>激活函数相当于是一个激活单元：</p>
+<ul>
+<li>激活函数使神经网络具有非线性。它决定感知机是否激发。</li>
+<li>激活函数的这种非线性赋予了深度网络学习复杂函数的能力。</li>
+</ul>
+<p>常见的激活函数如下：</p>
+<p><img src="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/image-20210624154414778.png"></p>
+<p>但是YOLOv5中所用到的激活函数稍微复杂一点：</p>
+<p>==1、Swish函数==<br>$$<br>f(x) = x · sigmoid(x)<br>$$<br>YOLOv5中swish函数的实现：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#utils\activations.py</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SiLU</span>(<span class="params">nn.Module</span>):</span>  <span class="comment"># export-friendly version of nn.SiLU()</span></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">x</span>):</span></span><br><span class="line">        <span class="keyword">return</span> x * torch.sigmoid(x)</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/image-20210624155031806.png"></p>
+<p>==2、Mish函数==<br>$$<br>f(x) = x·tanh(softplus(x)) = x·tanh(ln(1+e^x))<br>$$<br>YOLOv5中Mish函数的实现：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#utils\activations.py</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Mish</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">x</span>):</span></span><br><span class="line">        <span class="keyword">return</span> x * F.softplus(x).tanh()</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/image-20210624155337025.png"></p>
+<p>Mish函数和Swish函数的一阶导数和二阶导数图像如下，以及大范围内的函数图像：</p>
+<p><img src="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/image-20210624155535494.png"></p>
+<p>==3、Hardswish函数==<br>$$<br>Hardswish(x) = \begin{cases}<br>0,              \quad x\leq -3\<br>x,              \quad x&gt;+3\<br>x·(x+3)/6 ,     \quad otherwise \<br>\end{cases}<br>\tag{1}<br>$$</p>
+<p>YOLOv5中Hardswish函数的实现：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#utils\activations.py</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Hardswish</span>(<span class="params">nn.Module</span>):</span>  <span class="comment"># export-friendly version of nn.Hardswish()</span></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">x</span>):</span></span><br><span class="line">        <span class="comment"># return x * F.hardsigmoid(x)  # for torchscript and CoreML</span></span><br><span class="line">        <span class="keyword">return</span> x * F.hardtanh(x + <span class="number">3</span>, <span class="number">0.</span>, <span class="number">6.</span>) / <span class="number">6.</span>  <span class="comment"># for torchscript, CoreML and ONNX</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/image-20210624185837375.png"></p>
+<h3 id="2-2-模型代码解析-common-py"><a href="#2-2-模型代码解析-common-py" class="headerlink" title="2.2 模型代码解析(common.py )"></a>2.2 模型代码解析(common.py )</h3><p>YOLOv5整个网络结构如图所示：</p>
+<p><img src="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/yolov5model.png"></p>
+<p><strong>蓝色框（Conv</strong>）代表：卷积（conv）+ Batch Normalization (BN) + 激活函数（Hardwish）</p>
+<p><strong>立体蓝色框（Conv）</strong>代表：卷积步长为2，其他与蓝色框一致</p>
+<p>YOLOv5-python代码如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 为same卷积或same池化自动扩充</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">autopad</span>(<span class="params">k, p=<span class="literal">None</span></span>):</span>  <span class="comment"># kernel, padding</span></span><br><span class="line">    <span class="comment"># Pad to &#x27;same&#x27;</span></span><br><span class="line">    <span class="keyword">if</span> p <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        p = k // <span class="number">2</span> <span class="keyword">if</span> <span class="built_in">isinstance</span>(k, <span class="built_in">int</span>) <span class="keyword">else</span> [x // <span class="number">2</span> <span class="keyword">for</span> x <span class="keyword">in</span> k]  <span class="comment"># auto-pad</span></span><br><span class="line">    <span class="keyword">return</span> p</span><br><span class="line"><span class="comment"># 深度可分离卷积</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">DWConv</span>(<span class="params">c1, c2, k=<span class="number">1</span>, s=<span class="number">1</span>, act=<span class="literal">True</span></span>):</span> <span class="comment"># k=1是卷积核kenel，s=1是步长stride</span></span><br><span class="line">    <span class="comment"># Depthwise convolution</span></span><br><span class="line">    <span class="keyword">return</span> Conv(c1, c2, k, s, g=math.gcd(c1, c2), act=act) <span class="comment"># math.gcd() 返回的是最大公约数</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Conv</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line">    <span class="comment"># Standard convolution 标准卷积：conv+BN+hardswish</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, c1, c2, k=<span class="number">1</span>, s=<span class="number">1</span>, p=<span class="literal">None</span>, g=<span class="number">1</span>, act=<span class="literal">True</span></span>):</span>  <span class="comment"># ch_in, ch_out, kernel, stride, padding, groups</span></span><br><span class="line">        <span class="built_in">super</span>(Conv, self).__init__()</span><br><span class="line">        self.conv = nn.Conv2d(c1, c2, k, s, autopad(k, p), groups=g, bias=<span class="literal">False</span>)</span><br><span class="line">        self.bn = nn.BatchNorm2d(c2)</span><br><span class="line">        self.act = nn.Hardswish() <span class="keyword">if</span> act <span class="keyword">else</span> nn.Identity()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, x</span>):</span>  <span class="comment"># 网络的执行顺序是根据 forward 函数来决定的</span></span><br><span class="line">        <span class="keyword">return</span> self.act(self.bn(self.conv(x)))</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fuseforward</span>(<span class="params">self, x</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.act(self.conv(x))</span><br></pre></td></tr></table></figure>
+
+<p><strong>深黄色框（Bottlenack True）</strong>代表: 输入X经过两次蓝色框（Conv）后与输入X相加的和</p>
+<p><strong>浅黄色框（Bottlenack False）</strong>代表：输入X经过两次蓝色框（Conv）后的输出</p>
+<p>YOLOv5-python代码如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bottleneck</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line">    <span class="comment"># Standard bottleneck</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, c1, c2, shortcut=<span class="literal">True</span>, g=<span class="number">1</span>, e=<span class="number">0.5</span></span>):</span>  <span class="comment"># ch_in, ch_out, shortcut, groups, expansion</span></span><br><span class="line">        <span class="built_in">super</span>(Bottleneck, self).__init__()</span><br><span class="line">        c_ = <span class="built_in">int</span>(c2 * e)  <span class="comment"># hidden channels</span></span><br><span class="line">        self.cv1 = Conv(c1, c_, <span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">        self.cv2 = Conv(c_, c2, <span class="number">3</span>, <span class="number">1</span>, g=g)</span><br><span class="line">        self.add = shortcut <span class="keyword">and</span> c1 == c2</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, x</span>):</span></span><br><span class="line">        <span class="comment"># 根据self.add的值确定是否有shortcut</span></span><br><span class="line">        <span class="keyword">return</span> x + self.cv2(self.cv1(x)) <span class="keyword">if</span> self.add <span class="keyword">else</span> self.cv2(self.cv1(x))</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>深黄色框（BCSPn）</strong>代表: CSP( Cross Stage partial Network)跨阶段局部网络, 输入X 一路经过蓝色框（Conv）和n个深黄色框（Bottlenack True）串联，再接一个紫色框（典型的卷积）；另一路接一个紫色框（典型的卷积）；将两路输出做拼接。再将输出经过Batch Normalization (BN) +激活函数（Leaky Relu）+蓝色框（Conv）得到最终输出。</p>
+<p><strong>浅黄色框（BCSPn）</strong>代表:  n个Bottlenack False</p>
+<p>YOLOv5-python代码如下:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BottleneckCSP</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line">    <span class="comment"># CSP Bottleneck https://github.com/WongKinYiu/CrossStagePartialNetworks</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, c1, c2, n=<span class="number">1</span>, shortcut=<span class="literal">True</span>, g=<span class="number">1</span>, e=<span class="number">0.5</span></span>):</span>  <span class="comment"># ch_in, ch_out, number, shortcut, groups, expansion</span></span><br><span class="line">        <span class="built_in">super</span>(BottleneckCSP, self).__init__()</span><br><span class="line">        c_ = <span class="built_in">int</span>(c2 * e)  <span class="comment"># hidden channels</span></span><br><span class="line">        self.cv1 = Conv(c1, c_, <span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">        self.cv2 = nn.Conv2d(c1, c_, <span class="number">1</span>, <span class="number">1</span>, bias=<span class="literal">False</span>)</span><br><span class="line">        self.cv3 = nn.Conv2d(c_, c_, <span class="number">1</span>, <span class="number">1</span>, bias=<span class="literal">False</span>)</span><br><span class="line">        self.cv4 = Conv(<span class="number">2</span> * c_, c2, <span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">        self.bn = nn.BatchNorm2d(<span class="number">2</span> * c_)  <span class="comment"># applied to cat(cv2, cv3)</span></span><br><span class="line">        self.act = nn.LeakyReLU(<span class="number">0.1</span>, inplace=<span class="literal">True</span>)</span><br><span class="line">        <span class="comment"># *操作符可以把一个list拆开成一个个独立的元素</span></span><br><span class="line">        self.m = nn.Sequential(*[Bottleneck(c_, c_, shortcut, g, e=<span class="number">1.0</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(n)])</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, x</span>):</span></span><br><span class="line">        y1 = self.cv3(self.m(self.cv1(x)))</span><br><span class="line">        y2 = self.cv2(x)</span><br><span class="line">        <span class="keyword">return</span> self.cv4(self.act(self.bn(torch.cat((y1, y2), dim=<span class="number">1</span>))))</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>绿色网格框（Focus）</strong>代表：先做分片（slice）再做拼接（Connect）,在经过蓝色框(Conv)。</p>
+<p>==Focus作用：==把数据切分为4份,每份数据都是相当于2倍下采样得到的,然后在 channe维度进行拼接,最后进行卷积操作。如下图所示：</p>
+<p><img src="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/image-20210625110610159.png"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#假设出入Tensor如下：</span></span><br><span class="line">tensor([[[[<span class="number">112</span>,<span class="number">13</span>,<span class="number">14</span>]</span><br><span class="line">[<span class="number">21</span>,<span class="number">22</span>,<span class="number">23</span>,<span class="number">24</span>]</span><br><span class="line">[<span class="number">31</span>,<span class="number">32</span>,<span class="number">33</span>,<span class="number">34</span>]</span><br><span class="line">[<span class="number">41</span>,<span class="number">42</span>,<span class="number">43</span>,<span class="number">44</span>]]]])</span><br><span class="line"><span class="comment">#则经过Focus输出的Tensor如下：</span></span><br><span class="line">tensor([[[[<span class="number">11</span>, <span class="number">13</span>],</span><br><span class="line">[<span class="number">31</span>,<span class="number">33</span>]],</span><br><span class="line">[<span class="number">21</span>,<span class="number">23</span>]],</span><br><span class="line">[[<span class="number">41</span>,<span class="number">43</span>],</span><br><span class="line">[[<span class="number">12</span>,<span class="number">14</span>],</span><br><span class="line">[<span class="number">32</span>,<span class="number">34</span>]],</span><br><span class="line">[[<span class="number">22</span>,<span class="number">24</span>],</span><br><span class="line">[<span class="number">42</span>,<span class="number">44</span>]]]])</span><br></pre></td></tr></table></figure>
+
+<p>以 Yolo55的结构为例,原始640 · 640 · 3的图像输入 FoCus结构,采用切片操作,先变成320 · 320 · 12的特征图,再经过一次32个卷积核的卷积操作,最终变成320 · 320 · 32的特征图。</p>
+<p>YOLOv5-python代码如下:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Focus: 把宽度w和高度h的信息整合到c空间中</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Focus</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line">    <span class="comment"># Focus wh information into c-space</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, c1, c2, k=<span class="number">1</span>, s=<span class="number">1</span>, p=<span class="literal">None</span>, g=<span class="number">1</span>, act=<span class="literal">True</span></span>):</span>  <span class="comment"># ch_in, ch_out, kernel, stride, padding, groups</span></span><br><span class="line">        <span class="built_in">super</span>(Focus, self).__init__()</span><br><span class="line">        self.conv = Conv(c1 * <span class="number">4</span>, c2, k, s, p, g, act)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, x</span>):</span>  <span class="comment"># x(b,c,w,h) -&gt; y(b,4c,w/2,h/2)</span></span><br><span class="line">        <span class="keyword">return</span> self.conv(torch.cat([x[..., ::<span class="number">2</span>, ::<span class="number">2</span>], x[..., <span class="number">1</span>::<span class="number">2</span>, ::<span class="number">2</span>], x[..., ::<span class="number">2</span>, <span class="number">1</span>::<span class="number">2</span>], x[..., <span class="number">1</span>::<span class="number">2</span>, <span class="number">1</span>::<span class="number">2</span>]], <span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+
+<p>**绿色框（SPP)**代表：空间最大池化，先做蓝色框（Conv）,再做最大值池化，再做拼接，再做蓝色框（Conv）。将SPP块添加到CSP上之后，会极大地增加了模型的感知能力，分离出特征图的最大特征。并且不会影响网络运行速度。</p>
+<p>YOLOv5-python代码如下:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 空间金字塔池化</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SPP</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line">    <span class="comment"># Spatial pyramid pooling layer used in YOLOv3-SPP</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, c1, c2, k=(<span class="params"><span class="number">5</span>, <span class="number">9</span>, <span class="number">13</span></span>)</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(SPP, self).__init__()</span><br><span class="line">        c_ = c1 // <span class="number">2</span>  <span class="comment"># hidden channels</span></span><br><span class="line">        self.cv1 = Conv(c1, c_, <span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">        self.cv2 = Conv(c_ * (<span class="built_in">len</span>(k) + <span class="number">1</span>), c2, <span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">        self.m = nn.ModuleList([nn.MaxPool2d(kernel_size=x, stride=<span class="number">1</span>, padding=x // <span class="number">2</span>) <span class="keyword">for</span> x <span class="keyword">in</span> k])</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, x</span>):</span></span><br><span class="line">        x = self.cv1(x)</span><br><span class="line">        <span class="keyword">return</span> self.cv2(torch.cat([x] + [m(x) <span class="keyword">for</span> m <span class="keyword">in</span> self.m], <span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+
+<p>==灵活配置不同复杂度的模型==</p>
+<p><img src="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/image-20210625105957047.png"></p>
+<p>YOLOV5的四种网络结构是 depth multiple和 width multiple两个参数,来进行控制网络的深度和宽度。其中depth multiple控制网络的深度( Bottlenecks数), width multiple控制网络的宽度(卷积核数量)。</p>
+<h3 id="2-3-数据集创建（dataset-py）"><a href="#2-3-数据集创建（dataset-py）" class="headerlink" title="2.3 数据集创建（dataset.py）"></a>2.3 数据集创建（dataset.py）</h3><p>1、矩形推理和方形推理</p>
+<p>方形推理：将图像的短边填充为长边的长度<br>        矩形推理：将短边填充为32的最小整数倍</p>
+<p><img src="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/image-20210625150730777.png"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 图像缩放: 保持图片的宽高比例，剩下的部分采用灰色填充。</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">letterbox</span>(<span class="params">img, new_shape=(<span class="params"><span class="number">640</span>, <span class="number">640</span></span>), color=(<span class="params"><span class="number">114</span>, <span class="number">114</span>, <span class="number">114</span></span>), auto=<span class="literal">True</span>, scaleFill=<span class="literal">False</span>, scaleup=<span class="literal">True</span></span>):</span></span><br><span class="line">    <span class="comment"># Resize image to a 32-pixel-multiple rectangle https://github.com/ultralytics/yolov3/issues/232</span></span><br><span class="line">    shape = img.shape[:<span class="number">2</span>]  <span class="comment"># current shape [height, width]</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">isinstance</span>(new_shape, <span class="built_in">int</span>):</span><br><span class="line">        new_shape = (new_shape, new_shape)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Scale ratio (new / old) # 计算缩放因子</span></span><br><span class="line">    r = <span class="built_in">min</span>(new_shape[<span class="number">0</span>] / shape[<span class="number">0</span>], new_shape[<span class="number">1</span>] / shape[<span class="number">1</span>])</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    缩放(resize)到输入大小img_size的时候，如果没有设置上采样的话，则只进行下采样</span></span><br><span class="line"><span class="string">    因为上采样图片会让图片模糊，对训练不友好影响性能。</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> scaleup:  <span class="comment"># only scale down, do not scale up (for better test mAP)</span></span><br><span class="line">        r = <span class="built_in">min</span>(r, <span class="number">1.0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Compute padding</span></span><br><span class="line">    ratio = r, r  <span class="comment"># width, height ratios</span></span><br><span class="line">    new_unpad = <span class="built_in">int</span>(<span class="built_in">round</span>(shape[<span class="number">1</span>] * r)), <span class="built_in">int</span>(<span class="built_in">round</span>(shape[<span class="number">0</span>] * r))</span><br><span class="line">    dw, dh = new_shape[<span class="number">1</span>] - new_unpad[<span class="number">0</span>], new_shape[<span class="number">0</span>] - new_unpad[<span class="number">1</span>]  <span class="comment"># wh padding</span></span><br><span class="line">    <span class="keyword">if</span> auto:  <span class="comment"># minimum rectangle # 获取最小的矩形填充</span></span><br><span class="line">        dw, dh = np.mod(dw, <span class="number">32</span>), np.mod(dh, <span class="number">32</span>)  <span class="comment"># wh padding</span></span><br><span class="line">    <span class="comment"># 如果scaleFill=True,则不进行填充，直接resize成img_size, 任由图片进行拉伸和压缩</span></span><br><span class="line">    <span class="keyword">elif</span> scaleFill:  <span class="comment"># stretch</span></span><br><span class="line">        dw, dh = <span class="number">0.0</span>, <span class="number">0.0</span></span><br><span class="line">        new_unpad = (new_shape[<span class="number">1</span>], new_shape[<span class="number">0</span>])</span><br><span class="line">        ratio = new_shape[<span class="number">1</span>] / shape[<span class="number">1</span>], new_shape[<span class="number">0</span>] / shape[<span class="number">0</span>]  <span class="comment"># width, height ratios</span></span><br><span class="line">    <span class="comment"># 计算上下左右填充大小</span></span><br><span class="line">    dw /= <span class="number">2</span>  <span class="comment"># divide padding into 2 sides</span></span><br><span class="line">    dh /= <span class="number">2</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> shape[::-<span class="number">1</span>] != new_unpad:  <span class="comment"># resize</span></span><br><span class="line">        img = cv2.resize(img, new_unpad, interpolation=cv2.INTER_LINEAR)</span><br><span class="line">    top, bottom = <span class="built_in">int</span>(<span class="built_in">round</span>(dh - <span class="number">0.1</span>)), <span class="built_in">int</span>(<span class="built_in">round</span>(dh + <span class="number">0.1</span>))</span><br><span class="line">    left, right = <span class="built_in">int</span>(<span class="built_in">round</span>(dw - <span class="number">0.1</span>)), <span class="built_in">int</span>(<span class="built_in">round</span>(dw + <span class="number">0.1</span>))</span><br><span class="line">    <span class="comment"># 进行填充</span></span><br><span class="line">    img = cv2.copyMakeBorder(img, top, bottom, left, right, cv2.BORDER_CONSTANT, value=color)  <span class="comment"># add border</span></span><br><span class="line">    <span class="keyword">return</span> img, ratio, (dw, dh)</span><br></pre></td></tr></table></figure>
+
+<h3 id="未完待续…"><a href="#未完待续…" class="headerlink" title="未完待续….."></a><strong>未完待续…..</strong></h3></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Zhouwy</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2021/06/21/YOLO%E5%8E%9F%E7%90%86%E8%AF%A6%E8%A7%A3/">http://example.com/2021/06/21/YOLO%E5%8E%9F%E7%90%86%E8%AF%A6%E8%A7%A3/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">小周の部落阁</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/">目标检测</a><a class="post-meta__tags" href="/tags/YOLO/">YOLO　</a></div><div class="post_share"><div class="social-share" data-image="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/yolo.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/11/20/Mac%20M1%20Pro%20%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"><img class="prev-cover" src="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/Apple_MacM1X_images.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Mac M1 Pro 深度学习环境</div></div></a></div><div class="next-post pull-right"><a href="/2021/06/15/YOLOv5%E5%88%9D%E4%BD%93%E9%AA%8C/"><img class="next-cover" src="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/YOLOtest.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">【YOLOv5】初体验</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/06/15/YOLOv5%E5%88%9D%E4%BD%93%E9%AA%8C/" title="【YOLOv5】初体验"><img class="cover" src="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/YOLOtest.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-15</div><div class="title">【YOLOv5】初体验</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E3%80%90YOLOv5%E3%80%91%E5%8E%9F%E7%90%86%E8%AF%A6%E8%A7%A3"><span class="toc-number">1.</span> <span class="toc-text">【YOLOv5】原理详解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%9A%84%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87"><span class="toc-number">1.1.</span> <span class="toc-text">一、目标检测的性能指标</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1%E3%80%81%E6%B7%B7%E6%B7%86%E7%9F%A9%E9%98%B5%EF%BC%88confusion-matrix%EF%BC%89"><span class="toc-number">1.1.1.</span> <span class="toc-text">1.1、混淆矩阵（confusion matrix）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-IoU-Intersection-over-Union"><span class="toc-number">1.1.2.</span> <span class="toc-text">1.2 IoU(Intersection over Union)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-AP-and-mAP"><span class="toc-number">1.1.3.</span> <span class="toc-text">1.3 AP and mAP</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81YOLOv5%E9%A1%B9%E7%9B%AE%E4%BB%A3%E7%A0%81%E8%A7%A3%E6%9E%90"><span class="toc-number">1.2.</span> <span class="toc-text">二、YOLOv5项目代码解析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0%EF%BC%88Activations-py%EF%BC%89"><span class="toc-number">1.2.1.</span> <span class="toc-text">2.1 激活函数（Activations.py）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E6%A8%A1%E5%9E%8B%E4%BB%A3%E7%A0%81%E8%A7%A3%E6%9E%90-common-py"><span class="toc-number">1.2.2.</span> <span class="toc-text">2.2 模型代码解析(common.py )</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E6%95%B0%E6%8D%AE%E9%9B%86%E5%88%9B%E5%BB%BA%EF%BC%88dataset-py%EF%BC%89"><span class="toc-number">1.2.3.</span> <span class="toc-text">2.3 数据集创建（dataset.py）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%AA%E5%AE%8C%E5%BE%85%E7%BB%AD%E2%80%A6"><span class="toc-number">1.2.4.</span> <span class="toc-text">未完待续…..</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background: transparent"><div id="footer-wrap"><div class="copyright">&copy;2018 - 2022 By Zhouwy</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.2
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        insertScript: [200, () => {
+          document.querySelectorAll('mjx-container:not\([display]\)').forEach(node => {
+            const target = node.parentNode
+            if (target.nodeName.toLowerCase() === 'li') {
+              target.parentNode.classList.add('has-jax')
+            } else {
+              target.classList.add('has-jax')
+            }
+          });
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/contrib/copy-tex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/contrib/copy-tex.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', { class: 'katex-wrap'})
+  })
+})()</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/fireworks.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
