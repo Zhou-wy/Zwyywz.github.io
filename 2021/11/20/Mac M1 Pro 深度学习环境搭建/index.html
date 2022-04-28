@@ -1,0 +1,288 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mac M1 Pro 深度学习环境 | 小周の部落阁</title><meta name="keywords" content="Mac M1 Pro　"><meta name="author" content="Zhouwy"><meta name="copyright" content="Zhouwy"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Mac m1 系列芯片并不同与　intel平台的X86建构，而是采用的Arm架构。可谓是拳打intel，脚踢AMD。但是在对于Arm架构的芯片而言，最大的挑战就是生态，所以许多专业软件都无法原生支持。但是抵不住M1系列芯片强呀。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mac M1 Pro 深度学习环境">
+<meta property="og:url" content="http://example.com/2021/11/20/Mac%20M1%20Pro%20%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/index.html">
+<meta property="og:site_name" content="小周の部落阁">
+<meta property="og:description" content="Mac m1 系列芯片并不同与　intel平台的X86建构，而是采用的Arm架构。可谓是拳打intel，脚踢AMD。但是在对于Arm架构的芯片而言，最大的挑战就是生态，所以许多专业软件都无法原生支持。但是抵不住M1系列芯片强呀。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/Apple_MacM1X_images.jpg">
+<meta property="article:published_time" content="2021-11-19T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-11-24T16:00:00.000Z">
+<meta property="article:author" content="Zhouwy">
+<meta property="article:tag" content="Mac M1 Pro　">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/Apple_MacM1X_images.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2021/11/20/Mac%20M1%20Pro%20%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: Zhouwy","link":"链接: ","source":"来源: 小周の部落阁","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Mac M1 Pro 深度学习环境',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-11-25 00:00:00'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpeg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">29</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://blog-1300216920.cos.ap-nanjing.myqcloud.com/Apple_MacM1X_images.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">小周の部落阁</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Mac M1 Pro 深度学习环境</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-11-19T16:00:00.000Z" title="发表于 2021-11-20 00:00:00">2021-11-20</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-11-24T16:00:00.000Z" title="更新于 2021-11-25 00:00:00">2021-11-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/">安装教程</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Mac M1 Pro 深度学习环境"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Mac-M1-Pro-深度学习环境搭建"><a href="#Mac-M1-Pro-深度学习环境搭建" class="headerlink" title="Mac M1 Pro 深度学习环境搭建"></a>Mac M1 Pro 深度学习环境搭建</h1><h2 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h2><p>Mac m1 系列芯片并不同与　intel平台的X86建构，而是采用的Arm架构。据库克的说法，在生产力领域（又称：影音制作）可谓是拳打intel，脚踢AMD。但是在对于Arm架构的芯片而言，最大的挑战就是生态，所以许多专业软件都无法原生支持。但是抵不住M1系列芯片强呀。总会有人忍不住入手的。下面就记录下基于MacBook pro 14 (Mac M1 Pro)的深度学习环境搭建过程。</p>
+<p>基本上常用的开发工具如下图所示：</p>
+<p><img src="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/python%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.png"></p>
+<h2 id="二、基础环境"><a href="#二、基础环境" class="headerlink" title="二、基础环境"></a>二、基础环境</h2><p>到目前为止，anaconda还不能原生支持M1芯片，而Python是已经原生支持M1芯片了。故而这里采用另一种方式安装Python。</p>
+<ul>
+<li><em>下载 <a href="https://link.zhihu.com/?target=https://codechina.csdn.net/mirrors/conda-forge/miniforge?utm_source=csdn_github_accelerator">Miniforge3</a> 点开链接找到对应的版本，下载.sh文件：</em></li>
+</ul>
+<p><img src="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/20211101.png" alt="20211101"></p>
+<p>在命令行中，执行该脚本：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">bash Miniforge3-MacOSX-arm64.sh</span><br></pre></td></tr></table></figure>
+
+<p>之后添加环境变量(一般会自动添加)：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># &gt;&gt;&gt; conda initialize &gt;&gt;&gt;</span><br><span class="line"># !! Contents within this block are managed by &#x27;conda init&#x27; !!</span><br><span class="line"> __conda_setup=&quot;$(&#x27;/Users/zwy/miniforge3/bin/conda&#x27; &#x27;shell.zsh&#x27; &#x27;hook&#x27; 2&gt; /de    v/null)&quot;</span><br><span class="line">if [ $? -eq 0 ]; then</span><br><span class="line">     eval &quot;$__conda_setup&quot;</span><br><span class="line">else</span><br><span class="line">     if [ -f &quot;/Users/zwy/miniforge3/etc/profile.d/conda.sh&quot; ]; then</span><br><span class="line">         . &quot;/Users/zwy/miniforge3/etc/profile.d/conda.sh&quot;</span><br><span class="line">     else</span><br><span class="line">         export PATH=&quot;/Users/zwy/miniforge3/bin:$PATH&quot;</span><br><span class="line">     fi</span><br><span class="line">fi</span><br><span class="line">unset __conda_setup</span><br></pre></td></tr></table></figure>
+
+<p>之后，终端中会出现（base）环境：即表示成功！</p>
+<p><img src="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/20211101%2013.42.32.png"></p>
+<p>然后创建python3.9的虚拟环境：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">conda create -n YourEnvName python=3.9 #创建</span><br><span class="line">conda activate YourEnvName #激活</span><br></pre></td></tr></table></figure>
+
+<p>基础的开发环境即安装完成：</p>
+<h2 id="三、相关的第三库"><a href="#三、相关的第三库" class="headerlink" title="三、相关的第三库"></a>三、相关的第三库</h2><p>首先，是做数据分析的常见库，比如：<code>numpy</code>,<code>matplotlib</code>,<code>pandas</code>····等。暂时不急，优先确定深度学习框架，在安装基础库。因为在安装框架时，会安装对应的基础库，如果自己提前装了，有可能会出现版本不兼容问题。</p>
+<p>首先：<code>TensorFlow</code></p>
+<p>现如今，<code>TensorFlow</code>已经原生支持Mac M1系列芯片，直接在命令行里面就可以安装：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">conda install -c apple tensorflow-deps</span><br><span class="line">python -m pip install tensorflow-macos</span><br><span class="line">python -m pip install tensorflow-metal</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/2021-11-03%2014.00.13.png" alt="2021-11-03 14.00.13"></p>
+<p>在终端打开python，测试GPU是否可以：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line">tf.test.is_gpu_available()</span><br><span class="line"><span class="comment">#会有警告，但是会返回 True</span></span><br></pre></td></tr></table></figure>
+
+<p><code>TensorFlow</code>安装基本完成！！！</p>
+<p>再安装<code>PyTorch</code>:</p>
+<p>可以在<a target="_blank" rel="noopener" href="https://anaconda.org/">Anaconda 的网站</a>上找到原生 PyTorch 包</p>
+<p><img src="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/%E6%88%AA%E5%B1%8F2021-11-03%2014.06.24.png"></p>
+<p>选择<code>osx-arm64</code>的版本，这里推荐<code>pytorch 1.10.0</code>,执行如下指令即可：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">conda install -c pytorch pytorch</span><br></pre></td></tr></table></figure>
+
+<p> 最后，先使用<code>pip list</code>查看一下已安装的库，再补上其他必须的库：</p>
+<p>我再安装了<code>OpenCV</code>,<code>matplotlib</code>,<code>pandas</code>等，可视自己情况再安装</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">conda install  matplotlib pandas</span><br></pre></td></tr></table></figure>
+
+<p>在安装<code>OpenCV</code>过程中发现由于：<code>OpenCV</code>所需的<code>numpy</code>版本是<code>1.21.0</code>以上，而<code>TensorFlow</code>要求的<code>numpy</code>小于<code>1.19.5</code>。</p>
+<p>故而不能使用<code>pip</code>    和<code>conda</code>    安装<code>OpenCV</code>。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#错误方式</span><br><span class="line">pip install opencv-python</span><br><span class="line">conda install opencv-python</span><br></pre></td></tr></table></figure>
+
+<p><strong>采用编译源码的方式安装<code>OpenCV</code></strong></p>
+<ul>
+<li><p>1、安装<code>camke</code>:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">brew install camke</span><br></pre></td></tr></table></figure></li>
+<li><p>2、获取<code>OpenCV</code><a target="_blank" rel="noopener" href="https://github.com/opencv/opencv_contrib/tree/4.5.4">源码</a>，可以访问<code>Github</code>主页，也可以使用以下命令下载：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git clone https://github.com/opencv/opencv_contrib.git</span><br><span class="line">git clone https://github.com/opencv/opencv.git</span><br></pre></td></tr></table></figure></li>
+<li><p>3、在<code>opencv-4.5.4</code>新建<code>build</code>文件夹，准备编译:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkdir build &amp;&amp; cd build</span><br></pre></td></tr></table></figure></li>
+<li></li>
+<li><p>4、设置<code>camke</code>编译规则，正式编译：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cmake \</span><br><span class="line">-D CMAKE_SYSTEM_PROCESSOR=arm64 \</span><br><span class="line">-D CMAKE_OSX_ARCHITECTURES=arm64 \</span><br><span class="line">-D WITH_OPENJPEG=OFF \</span><br><span class="line">-D WITH_IPP=OFF \</span><br><span class="line">-D CMAKE_BUILD_TYPE=RELEASE \</span><br><span class="line">-D CMAKE_INSTALL_PREFIX=/usr/local \</span><br><span class="line">-D OPENCV_EXTRA_MODULES_PATH=/YourPath/opencv_contrib-4.5.4/modules \</span><br><span class="line">-D PYTHON3_EXECUTABLE=/YourPath/miniforge3/envs/DeepLearning/bin/python \</span><br><span class="line">-D BUILD_opencv_python2=OFF \</span><br><span class="line">-D BUILD_opencv_python3=ON \</span><br><span class="line">-D INSTALL_PYTHON_EXAMPLES=ON \</span><br><span class="line">-D INSTALL_C_EXAMPLES=OFF \</span><br><span class="line">-D OPENCV_ENABLE_NONFREE=ON \</span><br><span class="line">-D BUILD_EXAMPLES=ON …</span><br></pre></td></tr></table></figure>
+
+<p>完成后，就可以编译了：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo make -j8</span><br></pre></td></tr></table></figure>
+
+<p>震惊！ 真的快，只有几分钟就编译完了。编译过程中会占满核心！</p>
+<p>然后安装：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
+
+<p>将<code>MacOS</code>的 <code>OpenCV</code>符号链接到虚拟环境:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mdfind cv2.cpython</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/2021-11-03%2021.37.48.png"></p>
+<p>最后，再设置软链接：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd /YourPath/miniforge3/envs/YourEnv/lib/python3.9/site-packages</span><br><span class="line">sudo ln -s /YourPath/site-packages/cv2/python-3.8/cv2.cpython-38-darwin.so //cv2.so</span><br></pre></td></tr></table></figure>
+
+<p>大功告成！！！</p>
+</li>
+</ul>
+<h2 id="四、开发工具"><a href="#四、开发工具" class="headerlink" title="四、开发工具"></a>四、开发工具</h2><p><code>Python</code>开发工具有很多，比较常用的当属<code>Pycharm</code>、<code>jupyter notebook</code>和<code>vscode</code>等。这些基本上都已经原生支持Mac M1系列芯片了。</p>
+<p>就以<code>Pycharm</code>为例：</p>
+<p><img src="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/%E6%88%AA%E5%B1%8F2021-11-03%2022.16.10.png"></p>
+<p>基本配置完成！</p>
+<h2 id="五、其他工具"><a href="#五、其他工具" class="headerlink" title="五、其他工具"></a>五、其他工具</h2><p>更新ing·······</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Zhouwy</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2021/11/20/Mac%20M1%20Pro%20%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">http://example.com/2021/11/20/Mac%20M1%20Pro%20%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">小周の部落阁</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Mac-M1-Pro/">Mac M1 Pro　</a></div><div class="post_share"><div class="social-share" data-image="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/Apple_MacM1X_images.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/02/22/STL/"><img class="prev-cover" src="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/STLinCpp.jpeg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">STL基础教程</div></div></a></div><div class="next-post pull-right"><a href="/2021/06/21/YOLO%E5%8E%9F%E7%90%86%E8%AF%A6%E8%A7%A3/"><img class="next-cover" src="https://blog-1300216920.cos.ap-nanjing.myqcloud.com/yolo.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">【YOLOv5】原理详解</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Mac-M1-Pro-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-number">1.</span> <span class="toc-text">Mac M1 Pro 深度学习环境搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%89%8D%E8%A8%80"><span class="toc-number">1.1.</span> <span class="toc-text">一、前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%9F%BA%E7%A1%80%E7%8E%AF%E5%A2%83"><span class="toc-number">1.2.</span> <span class="toc-text">二、基础环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E7%9B%B8%E5%85%B3%E7%9A%84%E7%AC%AC%E4%B8%89%E5%BA%93"><span class="toc-number">1.3.</span> <span class="toc-text">三、相关的第三库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7"><span class="toc-number">1.4.</span> <span class="toc-text">四、开发工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%85%B6%E4%BB%96%E5%B7%A5%E5%85%B7"><span class="toc-number">1.5.</span> <span class="toc-text">五、其他工具</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background: transparent"><div id="footer-wrap"><div class="copyright">&copy;2018 - 2022 By Zhouwy</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.2
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        insertScript: [200, () => {
+          document.querySelectorAll('mjx-container:not\([display]\)').forEach(node => {
+            const target = node.parentNode
+            if (target.nodeName.toLowerCase() === 'li') {
+              target.parentNode.classList.add('has-jax')
+            } else {
+              target.classList.add('has-jax')
+            }
+          });
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/contrib/copy-tex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/contrib/copy-tex.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', { class: 'katex-wrap'})
+  })
+})()</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/fireworks.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
